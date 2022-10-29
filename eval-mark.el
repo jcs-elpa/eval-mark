@@ -39,7 +39,7 @@
   :link '(url-link :tag "Repository" "https://github.com/jcs-elpa/eval-mark"))
 
 (defcustom eval-mark-commands
-  '(eval-buffer eval-region)
+  '(eval-buffer eval-defun eval-region)
   "List of commands to handle."
   :type 'list
   :group 'eval-mark)
