@@ -38,25 +38,31 @@
   :group 'tools
   :link '(url-link :tag "Repository" "https://github.com/jcs-elpa/eval-mark"))
 
-(defcustom eval-mark-commands
-  '(eval-buffer eval-defun eval-region)
+(defcustom eval-mark-commands-before
+  '( keyboard-quit top-level)
   "List of commands to handle."
   :type 'list
   :group 'eval-mark)
 
-(defun eval-mark--after (&rest _)
-  "Deactive mark."
-  (deactivate-mark))
+(defcustom eval-mark-commands-after
+  '( eval-buffer eval-defun eval-region)
+  "List of commands to handle."
+  :type 'list
+  :group 'eval-mark)
 
 (defun eval-mark--enable ()
   "Enable function `eval-mark-mode'."
-  (dolist (command eval-mark-commands)
-    (advice-add command :after #'eval-mark--after)))
+  (dolist (command eval-mark-commands-before)
+    (advice-add command :before #'deactivate-mark))
+  (dolist (command eval-mark-commands-after)
+    (advice-add command :after #'deactivate-mark)))
 
 (defun eval-mark--disable ()
   "Disable function `eval-mark-mode'."
-  (dolist (command eval-mark-commands)
-    (advice-remove command #'eval-mark--after)))
+  (dolist (command eval-mark-commands-before)
+    (advice-remove command #'deactivate-mark))
+  (dolist (command eval-mark-commands-after)
+    (advice-remove command #'deactivate-mark)))
 
 ;;;###autoload
 (define-minor-mode eval-mark-mode
