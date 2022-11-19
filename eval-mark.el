@@ -50,19 +50,21 @@
   :type 'list
   :group 'eval-mark)
 
+(defun eval-mark--deactivate-mark (&rest _) "Deactive mark." (deactivate-mark))
+
 (defun eval-mark--enable ()
   "Enable function `eval-mark-mode'."
   (dolist (command eval-mark-commands-before)
-    (advice-add command :before #'deactivate-mark))
+    (advice-add command :before #'eval-mark--deactivate-mark))
   (dolist (command eval-mark-commands-after)
-    (advice-add command :after #'deactivate-mark)))
+    (advice-add command :after #'eval-mark--deactivate-mark)))
 
 (defun eval-mark--disable ()
   "Disable function `eval-mark-mode'."
   (dolist (command eval-mark-commands-before)
-    (advice-remove command #'deactivate-mark))
+    (advice-remove command #'eval-mark--deactivate-mark))
   (dolist (command eval-mark-commands-after)
-    (advice-remove command #'deactivate-mark)))
+    (advice-remove command #'eval-mark--deactivate-mark)))
 
 ;;;###autoload
 (define-minor-mode eval-mark-mode
