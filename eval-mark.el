@@ -47,7 +47,7 @@
 (defcustom eval-mark-commands-after
   '( eval-buffer eval-defun eval-region)
   "List of commands to handle."
-  :type 'list
+  :type '(list symbol)
   :group 'eval-mark)
 
 (defun eval-mark--deactivate-mark (&rest _) "Deactive mark." (deactivate-mark))
