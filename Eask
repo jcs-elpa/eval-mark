@@ -3,7 +3,7 @@
          "Evaluate then deactive mark")
 
 (website-url "https://github.com/jcs-elpa/eval-mark")
-(keywords "tools")
+(keywords "lisp")
 
 (package-file "eval-mark.el")
 
