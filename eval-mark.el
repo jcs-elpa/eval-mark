@@ -50,6 +50,29 @@
   :type '(list symbol)
   :group 'eval-mark)
 
+;;
+;; (@* "Util" )
+;;
+
+(defun eval-mark--re-enable-mode (modename)
+  "Re-enable the MODENAME."
+  (msgu-silent
+    (funcall-interactively modename -1) (funcall-interactively modename 1)))
+
+(defun eval-mark--re-enable-mode-if-was-enabled (modename)
+  "Re-enable the MODENAME if was enabled."
+  (when (boundp modename)
+    (when (symbol-value modename) (eval-mark--re-enable-mode modename))
+    (symbol-value modename)))
+
+(defun eval-mark--listify (obj)
+  "Turn OBJ to list."
+  (if (listp obj) obj (list obj)))
+
+;;
+;; (@* "Core" )
+;;
+
 (defun eval-mark--deactivate-mark (&rest _) "Deactive mark." (deactivate-mark))
 
 (defun eval-mark--enable ()
@@ -73,6 +96,26 @@
   :require 'eval-mark-mode
   :group 'eval-mark
   (if eval-mark-mode (eval-mark--enable) (eval-mark--disable)))
+
+;;
+;; (@* "Users" )
+;;
+
+(defun eval-mark--add-commands (command lst)
+  "Add COMMAND to LST."
+  (let ((commands (eval-mark--listify command)))
+    (nconc lst commands)
+    (eval-mark--re-enable-mode-if-was-enabled #'eval-mark-mode)))
+
+;;;###autoload
+(defun eval-mark-add-before-commands (command)
+  "Add COMMAND to before list."
+  (eval-mark--add-commands command eval-mark-commands-before))
+
+;;;###autoload
+(defun eval-mark-add-after-commands (command)
+  "Add COMMAND to after list."
+  (eval-mark--add-commands command eval-mark-commands-after))
 
 (provide 'eval-mark)
 ;;; eval-mark.el ends here
