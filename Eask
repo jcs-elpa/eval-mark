@@ -1,3 +1,5 @@
+;; -*- mode: eask; lexical-binding: t -*-
+
 (package "eval-mark"
          "0.1.0"
          "Evaluate then deactive mark")
